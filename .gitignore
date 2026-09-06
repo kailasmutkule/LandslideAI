@@ -4,6 +4,7 @@
 __pycache__/
 *.py[cod]
 *.pyo
+*$py.class
 
 # ==============================
 # Virtual Environment
@@ -35,7 +36,7 @@ ml-service/data/processed/
 .ipynb_checkpoints/
 
 # ==============================
-# Model files
+# Model Files
 # ==============================
 *.pkl
 *.joblib
@@ -56,6 +57,7 @@ ml-service/data/processed/
 Thumbs.db
 
 # ==============================
-# VS Code
+# IDE
 # ==============================
 .vscode/
+.idea/

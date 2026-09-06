@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NER Smart Logistics Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>NER Smart Logistics</h1>
+      <p>AI-Based Accessibility & Risk Intelligence Platform</p>
+    </div>
+    <div class="status"><span class="dot"></span><span id="systemStatus">Checking API...</span></div>
+  </header>
+
+  <main class="container">
+    <section class="cards" id="summaryCards">
+      <div class="card"><span>Monitored Locations</span><strong id="locations">—</strong></div>
+      <div class="card"><span>Total Roads</span><strong id="roads">—</strong></div>
+      <div class="card danger"><span>Blocked Roads</span><strong id="blockedRoads">—</strong></div>
+      <div class="card"><span>Incidents</span><strong id="incidents">—</strong></div>
+      <div class="card warning"><span>Active Alerts</span><strong id="alerts">—</strong></div>
+    </section>
+
+    <section class="panel map-panel">
+      <div class="panel-head"><h2>NER GIS Map</h2><button onclick="loadMapData()">Refresh Map</button></div>
+      <div id="map"></div>
+      <small class="muted">Leaflet + OpenStreetMap map. Production deployments should use a tile provider appropriate for their traffic.</small>
+    </section>
+
+    <section class="grid">
+      <div class="panel wide">
+        <div class="panel-head"><h2>Road Accessibility</h2><button onclick="loadRoads()">Refresh</button></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Road</th><th>Accessibility</th><th>Score</th><th>Risk</th><th>Blocked</th><th>Reason</th></tr></thead>
+            <tbody id="roadTable"><tr><td colspan="6">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Smart Route Planner</h2>
+        <form id="routeForm">
+          <div class="two"><label>Start Latitude<input id="startLat" type="number" step="any" value="27.586" required></label><label>Start Longitude<input id="startLon" type="number" step="any" value="91.859" required></label></div>
+          <div class="two"><label>Destination Latitude<input id="destLat" type="number" step="any" value="27.595" required></label><label>Destination Longitude<input id="destLon" type="number" step="any" value="91.872" required></label></div>
+          <label class="check"><input id="emergency" type="checkbox" checked> Emergency logistics mode</label>
+          <button class="primary" type="submit">Find Safe Route</button>
+        </form>
+        <div id="routeResult" class="result muted">Enter points and find a route.</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h2>External Data</h2><button onclick="searchNasa()">NASA Search</button></div>
+        <div class="integration-box">
+          <div><strong>OpenStreetMap/Overpass:</strong> no API key</div>
+          <div><strong>Open-Meteo:</strong> no API key</div>
+          <div><strong>NASA Earthdata:</strong> catalog search; protected downloads may need login/token</div>
+          <div><strong>Google Maps:</strong> URL mode available; direct APIs need a key + billing</div>
+          <pre id="nasaResult" class="mini-result">Ready.</pre>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h2>Active Alerts</h2><button onclick="loadAlerts()">Refresh</button></div>
+        <div id="alertList" class="list">Loading...</div>
+      </div>
+    </section>
+
+    <footer>Phase 8 • GIS + external data integrations • FastAPI + PostgreSQL/PostGIS</footer>
+  </main>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: #f8fafc;
+    color: #0f172a;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.02em;
+  }
+}
+
+/* Subtle 3D tilt-on-hover on cards (<6° limit per prompt requirements) */
+.tilt-card {
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease-out;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.tilt-card:hover {
+  transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) translateY(-3px);
+}
+
+/* Page Transition: fade + 10px slide, 200ms ease-out */
+.page-transition {
+  animation: pageEnter 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom modern scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Leaflet Overrides for Command Center Styling */
+.leaflet-popup-content-wrapper {
+  padding: 0 !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15), 0 8px 10px -6px rgba(15, 23, 42, 0.1) !important;
+  border: 1px solid #e2e8f0 !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  line-height: 1.4 !important;
+}
+
+.leaflet-popup-tip-container {
+  overflow: visible;
+}
+
+.leaflet-popup-tip {
+  background: #ffffff !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.leaflet-container {
+  font-family: var(--font-body) !important;
+  width: 100%;
+  height: 100%;
+  background: #e2e8f0 !important;
+  z-index: 10;
+}
