@@ -1,23 +1,63 @@
-# Environment variables
-.env
-.env.*
-
-# Keep example environment file
-!.env.example
-
-# Python virtual environments
-.venv/
-venv/
-env/
-
-# Python cache
+# ==============================
+# Python
+# ==============================
 __pycache__/
 *.py[cod]
+*.pyo
 *$py.class
 
-# macOS
-.DS_Store
+# ==============================
+# Virtual Environment
+# ==============================
+venv/
+.venv/
+env/
 
+# ==============================
+# Environment Variables
+# ==============================
+.env
+.env.*
+!.env.example
+
+# ==============================
+# ML Raw Data
+# ==============================
+ml-service/data/raw/
+
+# ==============================
+# ML temporary/processed data
+# ==============================
+ml-service/data/processed/
+
+# ==============================
+# Jupyter
+# ==============================
+.ipynb_checkpoints/
+
+# ==============================
+# Model Files
+# ==============================
+*.pkl
+*.joblib
+*.h5
+*.keras
+*.pt
+*.pth
+
+# ==============================
+# Logs
+# ==============================
+*.log
+
+# ==============================
+# OS
+# ==============================
+.DS_Store
+Thumbs.db
+
+# ==============================
 # IDE
+# ==============================
 .vscode/
 .idea/
