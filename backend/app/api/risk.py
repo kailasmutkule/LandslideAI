@@ -39,62 +39,55 @@ def predict_risk(
             detail="Location not found",
         )
 
-    # Run AI model
     score, level = predict(payload)
 
-    # Generate explanations
     reasons = []
 
-    if payload.rainfall_24h_mm >= 100:
+    if payload.rainfall_1d >= 100:
+        reasons.append("Very high 24-hour rainfall")
+    elif payload.rainfall_1d >= 50:
         reasons.append("High 24-hour rainfall")
-    elif payload.rainfall_24h_mm >= 50:
-        reasons.append("Elevated 24-hour rainfall")
 
-    if payload.humidity_pct >= 80:
-        reasons.append("High humidity")
+    if payload.rainfall_3d >= 150:
+        reasons.append("High accumulated 3-day rainfall")
 
-    if payload.wind_speed_kmh >= 50:
-        reasons.append("Strong wind")
+    if payload.rainfall_7d >= 250:
+        reasons.append("High accumulated 7-day rainfall")
 
-    if payload.pressure_hpa < 980:
-        reasons.append("Low atmospheric pressure")
+    if payload.slope_degrees >= 30:
+        reasons.append("Steep terrain")
 
     if not reasons:
         reasons.append(
-            "Environmental indicators are currently relatively low"
+            "Environmental and terrain indicators are currently relatively low"
         )
 
-    # Save prediction
     row = RiskPrediction(
         location_id=payload.location_id,
         predicted_at=datetime.now(timezone.utc),
-        rainfall_24h_mm=payload.rainfall_24h_mm,
-        temperature_c=payload.temperature_c,
-        humidity_pct=payload.humidity_pct,
-        wind_speed_kmh=payload.wind_speed_kmh,
-        pressure_hpa=payload.pressure_hpa,
+        rainfall_24h_mm=payload.rainfall_1d,
+        temperature_c=0,
+        humidity_pct=0,
+        wind_speed_kmh=0,
+        pressure_hpa=0,
         risk_score=score,
         risk_level=level,
+        model_version="xgboost-temporal",
     )
 
     db.add(row)
     db.flush()
 
-    # Automatic alert for HIGH / CRITICAL
     alert_id = None
 
     if level in {"HIGH", "CRITICAL"}:
-        severity = (
-            "CRITICAL"
-            if level == "CRITICAL"
-            else "HIGH"
-        )
+        severity = level
 
-        title = f"{level} Risk Warning"
+        title = f"{level} Landslide Risk Warning"
 
         message = (
             f"{location.name} has a "
-            f"{level.lower()} environmental risk score "
+            f"{level.lower()} landslide risk score "
             f"of {score:.2f}. "
             + "; ".join(reasons)
             + ". Immediate monitoring is recommended."
@@ -120,7 +113,7 @@ def predict_risk(
         "location_id": payload.location_id,
         "risk_score": score,
         "risk_level": level,
-        "model_version": row.model_version,
+        "model_version": "xgboost-temporal",
         "explanation": reasons,
         "alert_id": alert_id,
     }
@@ -132,11 +125,7 @@ def predict_risk(
 )
 def list_predictions(
     location_id: uuid.UUID | None = Query(default=None),
-    limit: int = Query(
-        default=50,
-        ge=1,
-        le=500,
-    ),
+    limit: int = Query(default=50, ge=1, le=500),
     db: Session = Depends(get_db),
 ):
     q = db.query(RiskPrediction)

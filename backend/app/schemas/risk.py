@@ -2,13 +2,28 @@ from datetime import datetime
 from uuid import UUID
 from pydantic import BaseModel, Field
 
+
 class RiskPredictionRequest(BaseModel):
     location_id: UUID
-    rainfall_24h_mm: float = Field(ge=0, le=2000)
-    temperature_c: float = Field(ge=-50, le=70)
-    humidity_pct: float = Field(ge=0, le=100)
-    wind_speed_kmh: float = Field(ge=0, le=300)
-    pressure_hpa: float = Field(ge=800, le=1100)
+
+    latitude: float
+    longitude: float
+
+    rainfall_1d: float = Field(default=0.0, ge=0)
+    rainfall_3d: float = Field(default=0.0, ge=0)
+    rainfall_7d: float = Field(default=0.0, ge=0)
+    rainfall_30d: float = Field(default=0.0, ge=0)
+
+    rainfall_1d_available: int = Field(default=0, ge=0, le=1)
+    rainfall_3d_available: int = Field(default=0, ge=0, le=1)
+    rainfall_7d_available: int = Field(default=0, ge=0, le=1)
+    rainfall_30d_available: int = Field(default=0, ge=0, le=1)
+
+    elevation_m: float = 0.0
+    slope_degrees: float = 0.0
+
+    event_date: str
+
 
 class RiskPredictionOut(BaseModel):
     id: UUID
@@ -24,6 +39,7 @@ class RiskPredictionOut(BaseModel):
     model_version: str
 
     model_config = {"from_attributes": True}
+
 
 class RiskPredictionResponse(BaseModel):
     location_id: UUID

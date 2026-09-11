@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = "development"
     DEMO_MODE: bool = True
     MAPBOX_ACCESS_TOKEN: str = ""
+    ML_SERVICE_URL: str = "http://localhost:8001"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
